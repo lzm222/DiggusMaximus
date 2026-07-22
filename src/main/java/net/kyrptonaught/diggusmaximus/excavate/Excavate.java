@@ -67,12 +67,12 @@ public class Excavate {
 
         if (startBlock == null || startBlock.isAir()) {
             var holder = BuiltInRegistries.BLOCK.get(startId);
-            if (holder.isEmpty()) {
+            if (holder == null) {
                 // em, we have no way to determine the id :(
                 // Fixme: incorrect capture or bad race?
                 return;
             }
-            startBlockHolder = holder.get();
+            startBlockHolder = holder.defaultBlockState().getBlockHolder();
         } else {
             startBlockHolder = startBlock.getBlockHolder();
         }
