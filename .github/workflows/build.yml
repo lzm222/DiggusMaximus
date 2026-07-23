@@ -11,14 +11,6 @@ on:
         required: false
         type: boolean
         default: true
-      publish-maven:
-        required: false
-        type: boolean
-        default: false
-      publish-mod:
-        required: false
-        type: boolean
-        default: false
   workflow_dispatch:
     inputs:
       mod-release:
@@ -31,16 +23,6 @@ on:
         type: boolean
         default: true
         description: Upload build artifacts
-      publish-maven:
-        required: true
-        type: boolean
-        default: false
-        description: Publish artifacts to Maven
-      publish-mod:
-        required: true
-        type: boolean
-        default: false
-        description: Publish artifacts to CurseForge and Modrinth
 
 jobs:
   build:
@@ -78,22 +60,5 @@ jobs:
           name: 'build'
           path: |
             build/libs
-            fabric/build/libs
             neoforge/build/libs
           retention-days: 7
-
-      - name: Publish To Maven
-        if: inputs.publish-maven
-        env:
-          MOD_MAVEN_USER: ${{ secrets.MOD_MAVEN_USER }}
-          MOD_MAVEN_PASS: ${{ secrets.MOD_MAVEN_PASS }}
-        run: |
-          ./gradlew publish
-
-      - name: Publish To CF/MR
-        if: inputs.publish-mod
-        env:
-          MOD_CURSEFORGE_TOKEN: ${{ secrets.MOD_CURSEFORGE_TOKEN }}
-          MOD_MODRINTH_TOKEN: ${{ secrets.MOD_MODRINTH_TOKEN }}
-        run: |
-          ./gradlew publishUnified
